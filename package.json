@@ -3,7 +3,8 @@
   "scripts": {
     "lint": "eslint ./",
     "lint:report": "eslint --format gitlab ./",
-    "test:unit": "jest"
+    "test:unit": "jest",
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
