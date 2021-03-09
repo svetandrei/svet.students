@@ -51,6 +51,6 @@ describe('Cart total calculator', () => {
     // 60 000 - 20% on surplus - 15%
     expect(calculate(60000, 1, MINUS_15_PERCENT)).toEqual(49300);
     // 60 000 - 5% - 20% on surplus - 15%
-    expect(calculate(60000, 94, MINUS_15_PERCENT)).toEqual(46750);
+    expect(calculate(60000, 94, MINUS_15_PERCENT)).toEqual(47260);
   });
 });
