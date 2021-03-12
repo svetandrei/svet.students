@@ -4,7 +4,7 @@
     "lint": "eslint ./",
     "lint:report": "eslint --format gitlab ./",
     "test:unit": "jest",
-    "test": "jest"
+    "test": "npm i && jest"
   },
   "author": "",
   "license": "ISC",
