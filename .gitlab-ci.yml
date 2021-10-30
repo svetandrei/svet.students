@@ -12,13 +12,13 @@ stages:
   before_script:
     - npm ci --cache .npm_cache --prefer-offline
 
-lint:
-  extends: .node-job
-  stage: source code checks
-  script:
-    - npm run lint:report
-  only:
-    - branches
+# lint:
+#   extends: .node-job
+#   stage: source code checks
+#   script:
+#     - npm run lint:report
+#   only:
+#     - branches
 
 test:
   extends: .node-job
