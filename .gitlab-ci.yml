@@ -1,4 +1,29 @@
-include:
-  - project: learning_materials/js
-    ref: master
-    file: common-ci.yml
+stages:
+  - source code checks
+
+.node-job:
+  image: registry.skillbox.ru/node:14-alpine
+  tags:
+    - students
+  cache:
+    key: npm_cache
+    paths:
+      - .npm_cache/
+  before_script:
+    - npm ci --cache .npm_cache --prefer-offline
+
+lint:
+  extends: .node-job
+  stage: source code checks
+  script:
+    - npm run lint:report
+  only:
+    - merge_requests
+
+test:
+  extends: .node-job
+  stage: source code checks
+  script:
+    - npm run test:unit --if-present
+  only:
+    - merge_requests
