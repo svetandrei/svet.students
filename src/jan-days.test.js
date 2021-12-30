@@ -13,8 +13,8 @@ function lastDay(day) {
 }
 
 describe('january days printer', () => {
-  afterAll(() => {
-    logSpy.mockRestore();
+  afterEach(() => {
+    logSpy.mockClear();
   });
 
   for (const day of days) {
