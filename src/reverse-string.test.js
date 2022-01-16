@@ -2,22 +2,26 @@ import reverseString from './reverse-string';
 
 const logSpy = jest.spyOn(console, 'log').mockImplementation((str) => str);
 
-describe('reverse string printer', () => {
+describe('вывод перевёрнутой строки', () => {
+  afterEach(() => {
+    logSpy.mockClear();
+  });
+
   afterAll(() => {
     logSpy.mockRestore();
   });
 
-  it('should print empty string for empty string argument', () => {
+  it('для пустой строки выводится также пустая строка', () => {
     reverseString('');
     expect(logSpy).toHaveLastReturnedWith('');
   });
 
-  it('should print same string for a single character string argument', () => {
+  it('для односимвольной строки выводится такая же строка', () => {
     reverseString('x');
     expect(logSpy).toHaveLastReturnedWith('x');
   });
 
-  it('should print reversed string', () => {
+  it('строка корректно переворачивается', () => {
     reverseString('12345');
     expect(logSpy).toHaveLastReturnedWith('54321');
   });

@@ -1,3 +1,5 @@
+// здесь находится код для автоматического тестирования
+// его нельзя изменять!
 import janDays from './jan-days';
 
 const logSpy = jest.spyOn(console, 'log').mockImplementation((str) => str);
@@ -12,13 +14,17 @@ function lastDay(day) {
   return days[(days.indexOf(day) - 5 + 7) % 7];
 }
 
-describe('january days printer', () => {
+describe('вывод в консоль дней недели января', () => {
   afterEach(() => {
     logSpy.mockClear();
   });
 
+  afterAll(() => {
+    logSpy.mockRestore();
+  });
+
   for (const day of days) {
-    it(`should print days from ${day}`, () => {
+    it(`выводятся все дни января, первый день ${day}`, () => {
       janDays(day);
       expect(logSpy).toHaveBeenCalledTimes(31);
       expect(logSpy).toHaveNthReturnedWith(1, `1 января, ${day}`);

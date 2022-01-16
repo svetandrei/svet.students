@@ -2,7 +2,7 @@ import moveTank from './tank';
 
 const logSpy = jest.spyOn(console, 'log').mockImplementation((str) => str.toLowerCase().split('ё').join('е'));
 
-describe('tank', () => {
+describe('движение танка по минному полю', () => {
   afterEach(() => {
     logSpy.mockClear();
   });
@@ -11,20 +11,20 @@ describe('tank', () => {
     logSpy.mockRestore();
   });
 
-  it('moves all the way without mines', () => {
+  it('танк двигается на 10 клеток, если на поле нет мин', () => {
     moveTank([false, false, false, false, false, false, false, false, false, false]);
     expect(logSpy).toHaveBeenCalledTimes(10);
     expect(logSpy).toHaveLastReturnedWith('танк переместился на 10');
   });
 
-  it('moves all the way with one mine', () => {
+  it('танк повреждён, но двигается на 10 клеток, если на пути попадается 1 мина', () => {
     moveTank([false, false, false, false, true, false, false, false, false, false]);
     expect(logSpy).toHaveBeenCalledTimes(10);
     expect(logSpy).toHaveNthReturnedWith(5, 'танк поврежден');
     expect(logSpy).toHaveLastReturnedWith('танк переместился на 10');
   });
 
-  it('moves until second mine has been reached', () => {
+  it('танк двигается, пока не попадёт на 2-ю мину, после чего уничтожается и перестаёт двигаться', () => {
     moveTank([false, false, false, false, true, false, true, false, false, false]);
     expect(logSpy).toHaveBeenCalledTimes(7);
     expect(logSpy).toHaveNthReturnedWith(5, 'танк поврежден');
