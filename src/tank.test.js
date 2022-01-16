@@ -19,7 +19,6 @@ describe('движение танка по минному полю', () => {
 
   it('танк повреждён, но двигается на 10 клеток, если на пути попадается 1 мина', () => {
     moveTank([false, false, false, false, true, false, false, false, false, false]);
-    expect(logSpy).toHaveBeenCalledTimes(10);
     expect(logSpy).toHaveNthReturnedWith(5, 'танк поврежден');
     expect(logSpy).toHaveLastReturnedWith('танк переместился на 10');
   });
