@@ -9,19 +9,24 @@ let randomReturnValue = 0;
 const logSpy = jest.spyOn(console, 'log').mockImplementation((ar) => `${ar}`);
 const randomSpy = jest.spyOn(Math, 'random').mockImplementation(() => randomReturnValue);
 
-describe('random number array printer', () => {
+describe('вывод в косноль массива случайных чисел', () => {
+  afterEach(() => {
+    logSpy.mockClear();
+    randomSpy.mockClear();
+  });
+
   afterAll(() => {
     logSpy.mockRestore();
     randomSpy.mockRestore();
   });
 
-  it('should print array to the console', () => {
+  it('все элементы массива выводится в консоль', () => {
     randomReturnValue = 0;
     printRandomArray(3, 0, 10);
     expect(logSpy).toHaveLastReturnedWith('0,0,0');
   });
 
-  it('should properly determine minimum random value', () => {
+  it('минимальное возможное случайное число определяется корректно', () => {
     randomReturnValue = 0;
     printRandomArray(1, -10, 10);
     expect(logSpy).toHaveLastReturnedWith('-10');
@@ -31,8 +36,8 @@ describe('random number array printer', () => {
     expect(logSpy).toHaveLastReturnedWith('5');
   });
 
-  it('should properly determine maximum random value', () => {
-    randomReturnValue = 1;
+  it('максимальное возможное случайное число определяется корректно', () => {
+    randomReturnValue = 0.9999999999;
     printRandomArray(1, 0, 10);
     expect(logSpy).toHaveLastReturnedWith('10');
     printRandomArray(1, 10, -100);
@@ -41,7 +46,7 @@ describe('random number array printer', () => {
     expect(logSpy).toHaveLastReturnedWith('5');
   });
 
-  it('should round numbers to the closest whole', () => {
+  it('округление дробных чисел работает правильно (до ближайшего целого)', () => {
     randomReturnValue = 0.6;
     printRandomArray(1, 3, 4);
     expect(logSpy).toHaveLastReturnedWith('4');

@@ -7,6 +7,7 @@ module.exports = {
     'jest/globals': true,
   },
   rules: {
+    'linebreak-style': 0,
     'prefer-const': 0,
     'no-alert': 0,
     'no-param-reassign': [2, { props: false }],
