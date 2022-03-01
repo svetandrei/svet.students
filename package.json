@@ -2,7 +2,7 @@
   "private": true,
   "scripts": {
     "lint": "eslint ./",
-    "lint:report": "eslint ./",
+    "lint:report": "eslint --format gitlab ./",
     "test:unit": "jest",
     "test": "npm i && jest"
   },
