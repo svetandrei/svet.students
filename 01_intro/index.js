@@ -46,11 +46,16 @@ let resRand2 = Math.round(Math.random() * range);
 
 let min = Math.min(m, n);
 
-console.log(resRand, resRand2);
+let rand1 = min + resRand;
+let rand2 = min + resRand2;
+
+console.log(rand1, rand2);
+
+console.log(rand1, rand2);
 console.log('Минимальное число', min);
-console.log('Оба числа равны', resRand === resRand2);
-console.log('Первое число больше', resRand > resRand2);
-console.log('Первое число меньше', resRand < resRand2);
-console.log('Первое число больше либо равно', resRand >= resRand2);
-console.log('Первое число меньше либо равно', resRand <= resRand2);
-console.log('Оба числа не равны', resRand !== resRand2);
+console.log('Оба числа равны', rand1 === rand2);
+console.log('Первое число больше', rand1 > rand2);
+console.log('Первое число меньше', rand1 < rand2);
+console.log('Первое число больше либо равно', rand1 >= rand2);
+console.log('Первое число меньше либо равно', rand1 <= rand2);
+console.log('Оба числа не равны', rand1 !== rand2);
