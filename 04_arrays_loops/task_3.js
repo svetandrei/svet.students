@@ -3,7 +3,6 @@ let hit = false;
 
 for (let i = 0; i < arrRoads.length; i++) {
   let position = i + 1;
-
   if (arrRoads[i] === true && hit === false) {
     console.log(`Танк поврежден`);
     hit = true;
