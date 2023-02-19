@@ -26,7 +26,6 @@ for (let i = 1; i < 32; i++) {
 nums.forEach((e) => {
   if (e >= curNum && e <= qtDayOfMonth) {
     console.log(`${e} ${arrMonth[curMonth]}, ${days[curDay - 1]}`);
-    curDay < days.length ? curDay++ : curDay = 1;
     if (curDay < days.length) {
       curDay++;
     } else {
