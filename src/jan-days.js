@@ -9,7 +9,7 @@ function januaryDays(firstWeekDay) {
     'четверг',
     'пятница',
     'суббота',
-    'воскресенье'
+    'воскресенье',
   ];
 
   let indexWeek = week.indexOf(firstWeekDay);
