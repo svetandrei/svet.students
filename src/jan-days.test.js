@@ -7,7 +7,7 @@ const days = ['понедельник', 'вторник', 'среда', 'чет�
 
 function nextDay(day) {
   const index = days.indexOf(day);
-  return days[index + 1] || days[0];
+  return days[index] || days[0];
 }
 
 function lastDay(day) {
