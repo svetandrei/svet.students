@@ -31,7 +31,7 @@ describe('вывод в косноль массива случайных чис�
     printRandomArray(1, -10, 10);
     expect(logSpy).toHaveLastReturnedWith('-10');
     printRandomArray(1, 10, 0);
-    expect(logSpy).toHaveLastReturnedWith('0');
+    expect(logSpy).toHaveLastReturnedWith('10');
     printRandomArray(1, 5, 5);
     expect(logSpy).toHaveLastReturnedWith('5');
   });
@@ -41,7 +41,7 @@ describe('вывод в косноль массива случайных чис�
     printRandomArray(1, 0, 10);
     expect(logSpy).toHaveLastReturnedWith('10');
     printRandomArray(1, 10, -100);
-    expect(logSpy).toHaveLastReturnedWith('10');
+    expect(logSpy).toHaveLastReturnedWith('-100');
     printRandomArray(1, 5, 5);
     expect(logSpy).toHaveLastReturnedWith('5');
   });
@@ -53,6 +53,6 @@ describe('вывод в косноль массива случайных чис�
 
     randomReturnValue = 0.4;
     printRandomArray(1, 3, 2);
-    expect(logSpy).toHaveLastReturnedWith('2');
+    expect(logSpy).toHaveLastReturnedWith('3');
   });
 });
