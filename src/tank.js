@@ -1,6 +1,18 @@
 // это функция, внутри которой нужно написать ваш код
 // roadMines (массив ячеек поля) будет задаваться в момент вызова функции, как в примере кода под ней
 function moveTank(roadMines) {
+  let hit, i = false;
+  for (i; i < roadMines.length; i++) {
+    if (roadMines[i] === true && hit === false) {
+      console.log('Танк поврежден');
+      hit = true;
+    } else if (roadMines[i] === true && hit === true) {
+      console.log('Танк уничтожен');
+      break;
+    } else {
+      console.log(`Танк переместился на ${i + 1}`);
+    }
+  }
 }
 
 // вызов функции

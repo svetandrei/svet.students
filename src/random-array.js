@@ -1,7 +1,11 @@
 // это функция, внутри которой нужно написать ваш код
 // count, n и m будут задаваться в момент вызова функции, как в примере кода под ней
 function randomArray(count, n, m) {
-  // ваш код здесь
+  let res = [];
+  for (let i = 0; i < count; i++) {
+    res.push(Math.round(Math.random() * (m - n) + n));
+  }
+  console.log(res);
 }
 
 // вызов функции
