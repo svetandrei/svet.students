@@ -19,7 +19,6 @@ function januaryDays(firstWeekDay) {
   }
   for (let elem of array) {
     const y = (indexWeek + elem - 1) % 7;
-    console.log(indexWeek);
     console.log(`${elem} января, ${week[y]}`);
   }
 }
