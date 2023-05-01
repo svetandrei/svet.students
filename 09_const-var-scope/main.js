@@ -40,17 +40,21 @@ function startGame(container, form) {
       form.btn.disabled = false;
       form.btn.innerHTML = "Начать игру";
       form.input.disabled = false;
-      document.querySelector('.row').remove();
-      alert('Время вышло, вы проиграли!');
+      // document.querySelector('.row').remove();
+      document.querySelector('.row').after(recreateApp());
       clearInterval(inter);
+      alert('Время вышло, вы проиграли!');
     }
   }, 1000);
 
-  const arrShuffle = shuffle(createNumbersArray(count * 2));
-  const qtyShuffleArr = arrShuffle.length;
+  const qtyShuffleArr = shuffle(createNumbersArray(count * 2)).length;
+  if (document.querySelector('div.row')) {
+    document.querySelector('div.row').remove();
+    document.querySelector('div.restart').remove();
+  }
   let row = document.createElement('div');
   row.classList.add('row', `row-cols-${count}`, 'g-4', 'mb-5');
-  arrShuffle.forEach((item) => {
+  shuffle(createNumbersArray(count * 2)).forEach((item) => {
     let colItem = card(item, qtyShuffleArr, inter);
     row.append(colItem.col);
   });
@@ -109,11 +113,21 @@ function checkCards(colCard, item, qtyShuffleArr, inter){
     document.querySelector('.btn').disabled = false;
     document.querySelector('.btn').innerHTML = "Начать игру";
     document.querySelector('input').disabled = false;
-    document.querySelector('.row').remove();
     alert('Поздравляю, вы выиграли!');
+    document.querySelector('.row').after(recreateApp());
     clearInterval(inter);
   }
+}
 
+function recreateApp() {
+  let reStartBtn = document.createElement('div');
+  reStartBtn.classList.add('btn', 'btn-primary', 'restart');
+  reStartBtn.innerHTML = 'Сыграть ещё';
+  reStartBtn.addEventListener('click', () => {
+    let btnStart = document.getElementById('start');
+    btnStart.click();
+  });
+  return reStartBtn;
 }
 
 /**
@@ -151,7 +165,8 @@ function createCountForm(name) {
   title.innerHTML = name;
   form.classList.add('input-group', 'form-count', 'mb-5');
   input.classList.add('form-control');
-  btn.classList.add('btn', 'btn-primary');
+  btn.classList.add('btn', 'start', 'btn-primary');
+  btn.id = 'start';
   btn.disabled = true;
   btn.innerHTML = "Начать игру";
   formText.classList.add("form-text");
