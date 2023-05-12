@@ -40,7 +40,6 @@ function startGame(container, form) {
       form.btn.disabled = false;
       form.btn.innerHTML = "Начать игру";
       form.input.disabled = false;
-      // document.querySelector('.row').remove();
       document.querySelector('.row').after(recreateApp());
       clearInterval(inter);
       alert('Время вышло, вы проиграли!');
