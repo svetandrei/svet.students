@@ -10,7 +10,7 @@
   <script defer src="main.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function(){
-      renderStudentsTable(studentsList);
+      renderStudentsTable(getDataStorage('students', studentsList));
     });
   </script>
   <style type="text/css">

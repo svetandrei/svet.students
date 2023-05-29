@@ -36,6 +36,35 @@ const studentsList = [
 ]
 
 /**
+ * Save array in storage
+ * @param appName
+ * @param arObj
+ */
+function saveDataStorage(appName, arObj) {
+  let arrStudents = getDataStorage('students', studentsList);
+  arrStudents.push(arObj);
+  localStorage.setItem(appName, JSON.stringify(arrStudents));
+}
+
+/**
+ * Get students from storage
+ * @param nameKey
+ * @param studentsArr
+ * @returns {*}
+ */
+function getDataStorage(nameKey, studentsArr) {
+  let arrStudents = [];
+  if (localStorage.getItem(nameKey) === undefined
+    || localStorage.getItem(nameKey) == null) {
+    localStorage.setItem(nameKey, JSON.stringify(studentsArr));
+    arrStudents = studentsArr;
+  } else {
+    arrStudents = JSON.parse(localStorage.getItem(nameKey));
+  }
+  return arrStudents;
+}
+
+/**
  * Get html td student
  * @param studentObj
  * @returns {string}
@@ -50,25 +79,26 @@ function getStudentItem(studentObj) {
 
 /**
  * Get all rows of students
- * @param studentsArray
+ * @param arrStudents
  */
-function renderStudentsTable(studentsArray) {
+function renderStudentsTable(arrStudents) {
   let tBody = document.querySelector('tbody');
   tBody.innerHTML = '';
-  if (studentsArray.length && Array.isArray(studentsArray)) {
+
+  if (arrStudents.length && Array.isArray(arrStudents)) {
     let tHead = document.querySelector('thead tr');
     if (!tHead.children.length > 0) {
       tHead.innerHTML = '<th>#</th>';
       theadSortAndFilter(tHead);
     }
     let tr = '';
-    for (let obj in studentsArray) {
+    for (let obj in arrStudents) {
       let lastTh = document.querySelector('table tbody tr:last-child th');
       let th = '';
       th = lastTh ? `<th>${Number(lastTh.textContent) + 1}</th>` : `<th>1</th>`;
       tr = document.createElement('tr');
       tr.append(th);
-      tr.append(getStudentItem(studentsArray[obj]));
+      tr.append(getStudentItem(arrStudents[obj]));
       tBody.innerHTML += tr.innerText;
     }
   } else {
@@ -85,6 +115,7 @@ function renderStudentsTable(studentsArray) {
 let form = document.querySelector('form');
 form.addEventListener('submit', (e) => {
   e.preventDefault();
+  let addStudent = [];
   let tr = document.createElement('tr');
   let error = false;
   let lastTh = document.querySelector('table tbody tr:last-child th');
@@ -102,9 +133,9 @@ form.addEventListener('submit', (e) => {
     }
   });
   if (!error) {
-    studentsList.push(obj);
+    saveDataStorage('students', obj);
     form.querySelectorAll('input').forEach((el) => el.value = '');
-    renderStudentsTable(studentsList);
+    renderStudentsTable(getDataStorage('students', studentsList));
   }
 });
 
@@ -278,10 +309,10 @@ function theadSortAndFilter(tHead, length = false) {
           col.classList.add('asc');
           sort = false;
         }
-        renderStudentsTable(sortStudents(studentsList, txt.getAttribute('for'), sort));
+        renderStudentsTable(sortStudents(getDataStorage('students', studentsList), txt.getAttribute('for'), sort));
       });
       inputF.addEventListener('keyup', (e) => {
-        renderStudentsTable(filterStudents(studentsList, txt.getAttribute('for'), e.srcElement.value));
+        renderStudentsTable(filterStudents(getDataStorage('students', studentsList), txt.getAttribute('for'), e.srcElement.value));
       });
       thF.append(inputF);
       th.append(thS);
@@ -311,8 +342,9 @@ function changeTheadSort() {
  * @param sort
  * @returns {*}
  */
-const sortStudents = (arr, prop, sort = false) => arr.sort((a, b) => (sort === false ? a[prop] < b[prop]
-  : a[prop] > b[prop]) ? -1 : 1);
+const sortStudents = (arr, prop, sort = false) => arr.sort((a, b) => (sort === false
+  ? a[prop].toLowerCase() < b[prop].toLowerCase()
+  : a[prop].toLowerCase() > b[prop].toLowerCase()) ? -1 : 1);
 
 /**
  * Filter by column
@@ -325,7 +357,7 @@ function filterStudents(arr, prop, value) {
   let result = [],
     copyArr = [...arr];
   for(const item of copyArr) {
-    if (String(item[prop]).includes(value) === true) result.push(item);
+    if (String(item[prop].toLowerCase()).includes(value.toLowerCase()) === true) result.push(item);
   }
   return result;
 }
