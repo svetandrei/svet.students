@@ -11,7 +11,7 @@
   <script defer src="main.js"></script>
   <script defer>
     document.addEventListener('DOMContentLoaded', function(){
-      getStudents().then(res => renderStudentsTable(res));
+      getStudents().then(result => renderStudentsTable(getFormatStudents(result)));
     });
   </script>
   <style type="text/css">

@@ -2,10 +2,18 @@
  * Get students
  * @returns {Promise<*>}
  */
-const getStudents = async() => {
+const getStudents = async () => {
   const response = await fetch('http://localhost:3000/api/students');
-  let resStud = await response.json();
-  return resStud.map((item, i, arr) => {
+  return await response.json();
+}
+
+/**
+ * Get format students
+ * @param items
+ * @returns {*}
+ */
+function getFormatStudents(items) {
+  return items.map((item, i, arr) => {
     let newStud = {};
     newStud['id'] = item['id'];
     newStud['fio'] = item['name'] + ' ' + item['surname'] + ' ' + item['lastname'];
@@ -22,6 +30,7 @@ const getStudents = async() => {
  * @returns {Promise<void>}
  */
 async function addStudent(obj) {
+  const {faculty, dateBirth, yearEducation } = obj;
   let fio = obj.fio.split(' ');
   await fetch('http://localhost:3000/api/students', {
     method: 'POST',
@@ -30,9 +39,9 @@ async function addStudent(obj) {
       name: fio[1],
       surname: fio[2],
       lastname: fio[0],
-      faculty: obj.faculty,
-      birthday: obj.dateBirth,
-      studyStart: obj.yearEducation,
+      faculty: faculty,
+      birthday: dateBirth,
+      studyStart: yearEducation,
     })
   });
 }
@@ -52,6 +61,19 @@ function getStudentItem(tr, studentObj) {
       td.innerText = studentObj[key];
       tr.append(td);
     }
+  }
+}
+
+/**
+ * Delete student by id
+ * @param id
+ * @returns {Promise<void>}
+ */
+async function deleteStudent(id) {
+  if (confirm('Вы уверены?')) {
+    await fetch(`http://localhost:3000/api/students/${id}`, {
+      method: 'DELETE',
+    })
   }
 }
 
@@ -90,6 +112,11 @@ function renderStudentsTable(arrStudents) {
   }
 }
 
+/**
+ * Action for row
+ * @param tr
+ * @param item
+ */
 function action(tr, item) {
   let lastTd = document.createElement('td');
   lastTd.style.textAlign = 'center';
@@ -100,13 +127,7 @@ function action(tr, item) {
   btnDel.type = 'button';
   btnDel.classList.add('btn', 'btn-outline-danger');
   btnDel.addEventListener('click',  async(e) => {
-    if (confirm('Вы уверены?')) {
-      await fetch(`http://localhost:3000/api/students/${item.id}`, {
-        method: 'DELETE',
-      })
-      tr.remove();
-      getStudents().then(res => renderStudentsTable(res));
-    }
+    tr.remove(); await deleteStudent(item.id); getStudents().then(result => renderStudentsTable(getFormatStudents(result)));
   });
   btnDel.append(iconDel);
   lastTd.append(btnDel);
@@ -138,7 +159,7 @@ form.addEventListener('submit', async (e) => {
   if (!error) {
     await addStudent(obj);
     form.querySelectorAll('input').forEach((el) => el.value = '');
-    getStudents().then(res => renderStudentsTable(res));
+    getStudents().then(result => renderStudentsTable(getFormatStudents(result)));
   }
 });
 
@@ -311,10 +332,10 @@ function theadSortAndFilter(tHead, length = false) {
           col.classList.add('asc');
           sort = false;
         }
-        sortStudents(async () => getStudents(), txt.getAttribute('for'), sort).then((res) => renderStudentsTable(res));
+        sortStudents(async () => getStudents(), txt.getAttribute('for'), sort).then(result => renderStudentsTable(result));
       });
       inputF.addEventListener('keyup', (e) => {
-        filterStudents(async () => getStudents(), txt.getAttribute('for'), e.srcElement.value).then((res) => renderStudentsTable(res));
+        filterStudents(async () => getStudents(), txt.getAttribute('for'), e.srcElement.value).then(result => renderStudentsTable(result));
       });
       thF.append(inputF);
       th.append(thS);
@@ -349,7 +370,7 @@ function changeTheadSort() {
  */
 const sortStudents = async (arr, prop, sort = false) => {
   let res = await arr();
-  return res.sort((a, b) => (sort === false
+  return getFormatStudents(res).sort((a, b) => (sort === false
   ? a[prop].toLowerCase() < b[prop].toLowerCase()
   : a[prop].toLowerCase() > b[prop].toLowerCase()) ? -1 : 1)
 }
@@ -364,7 +385,7 @@ const sortStudents = async (arr, prop, sort = false) => {
 const filterStudents = async (arr, prop, value) => {
   let arrRes = await arr();
   let result = [],
-    copyArr = [...arrRes];
+    copyArr = [...getFormatStudents(arrRes)];
   for(const item of copyArr) {
     if (String(item[prop].toLowerCase()).includes(value.toLowerCase()) === true) result.push(item);
   }
