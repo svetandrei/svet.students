@@ -44,8 +44,20 @@
   <h3 class="pt-4 mb-3">Добавление студента</h3>
   <form class="row g-3 needs-validation mb-5">
     <div class="col-md-12 position-relative">
-      <label for="fio" class="form-label">Ф. И. О.</label>
-      <input type="text" class="form-control" id="fio">
+      <label for="lastname" class="form-label">Фамилия</label>
+      <input type="text" class="form-control" id="lastname">
+      <div class="invalid-tooltip">
+      </div>
+    </div>
+    <div class="col-md-12 position-relative">
+      <label for="name" class="form-label">Имя</label>
+      <input type="text" class="form-control" id="name">
+      <div class="invalid-tooltip">
+      </div>
+    </div>
+    <div class="col-md-12 position-relative">
+      <label for="surname" class="form-label">Отчество</label>
+      <input type="text" class="form-control" id="surname">
       <div class="invalid-tooltip">
       </div>
     </div>
@@ -56,14 +68,14 @@
       </div>
     </div>
     <div class="col-md-12 position-relative">
-      <label for="dateBirth" class="form-label">Дата рождения</label>
-      <input type="date" class="form-control" id="dateBirth" min="1900-01-01" max="2024-01-01" aria-describedby="validationTooltipUsernamePrepend" >
+      <label for="birthday" class="form-label">Дата рождения</label>
+      <input type="date" class="form-control" id="birthday" min="1900-01-01" max="2024-01-01" aria-describedby="validationTooltipUsernamePrepend" >
       <div class="invalid-tooltip">
       </div>
     </div>
     <div class="col-md-12 position-relative">
-      <label for="yearEducation" class="form-label">Годы обучения</label>
-      <input type="text" class="form-control" id="yearEducation">
+      <label for="studyStart" class="form-label">Годы обучения</label>
+      <input type="text" class="form-control" id="studyStart">
       <div class="invalid-tooltip">
       </div>
     </div>

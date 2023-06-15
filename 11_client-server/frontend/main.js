@@ -18,8 +18,8 @@ function getFormatStudents(items) {
     newStud['id'] = item['id'];
     newStud['fio'] = item['name'] + ' ' + item['surname'] + ' ' + item['lastname'];
     newStud['faculty'] = item['faculty'];
-    newStud['dateBirth'] = item['birthday'];
-    newStud['yearEducation'] = item['studyStart'];
+    newStud['birthday'] = item['birthday'];
+    newStud['studyStart'] = item['studyStart'];
     return newStud;
   });
 }
@@ -30,19 +30,10 @@ function getFormatStudents(items) {
  * @returns {Promise<void>}
  */
 async function addStudent(obj) {
-  const {faculty, dateBirth, yearEducation } = obj;
-  let fio = obj.fio.split(' ');
   await fetch('http://localhost:3000/api/students', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      name: fio[1],
-      surname: fio[2],
-      lastname: fio[0],
-      faculty: faculty,
-      birthday: dateBirth,
-      studyStart: yearEducation,
-    })
+    body: JSON.stringify(obj)
   });
 }
 
@@ -70,11 +61,9 @@ function getStudentItem(tr, studentObj) {
  * @returns {Promise<void>}
  */
 async function deleteStudent(id) {
-  if (confirm('Вы уверены?')) {
-    await fetch(`http://localhost:3000/api/students/${id}`, {
-      method: 'DELETE',
-    })
-  }
+  await fetch(`http://localhost:3000/api/students/${id}`, {
+    method: 'DELETE',
+  })
 }
 
 /**
@@ -127,7 +116,11 @@ function action(tr, item) {
   btnDel.type = 'button';
   btnDel.classList.add('btn', 'btn-outline-danger');
   btnDel.addEventListener('click',  async(e) => {
-    tr.remove(); await deleteStudent(item.id); getStudents().then(result => renderStudentsTable(getFormatStudents(result)));
+    tr.remove();
+    if (confirm('Вы уверены?')) {
+      await deleteStudent(item.id);
+    }
+    getStudents().then(result => renderStudentsTable(getFormatStudents(result)));
   });
   btnDel.append(iconDel);
   lastTd.append(btnDel);
@@ -181,10 +174,10 @@ function getAge(birthday) {
  */
 function getValObject(el) {
   let nD = new Date();
-  if (el.id === 'dateBirth') {
+  if (el.id === 'birthday') {
     let d = new Date(el.valueAsDate);
     return formatDate(d);
-  } else if (el.id === 'yearEducation') {
+  } else if (el.id === 'studyStart') {
     let curs = nD.getFullYear() - el.value < 4 ? (nD.getFullYear() - el.value) + ' курс': 'Закончил';
     return `${el.value} - ${nD.getFullYear()} (${curs})`;
   } else {
@@ -237,7 +230,7 @@ inputs.forEach(function(el) {
  * @returns {boolean}
  */
 function availableInput(e) {
-  if (e.srcElement.id !== 'yearEducation' && e.srcElement.id !== 'dateBirth') {
+  if (e.srcElement.id !== 'studyStart' && e.srcElement.id !== 'birthday') {
     let key = (window.event ? e.keyCode : e.which) || (e.clipboardData || window.clipboardData);
     let reg = new RegExp(/^[а-яё\s-]+$/i)
     if (reg.test(e.key) || key === 8 || key === 46
@@ -303,16 +296,18 @@ function errorInput(input) {
  * @returns {number}
  */
 function theadSortAndFilter(tHead, length = false) {
-  let lb = document.querySelectorAll('label.form-label');
+  let headerTH = [
+    ['fio', 'Ф.И.О'], ['faculty', 'Факультет'], ['birthday', 'Дата Рождения'], ['studyStart', 'Годы обучения']
+  ];
   if (!length) {
-    lb.forEach((txt) => {
+    headerTH.forEach((txt) => {
       let th = document.createElement('th');
       let thS = document.createElement('div');
       thS.classList.add('th-sort', 'both');
       let thF = document.createElement('div');
       thF.classList.add('th-filter');
       let inputF = document.createElement('input');
-      thS.textContent = txt.textContent;
+      thS.textContent = txt[1];
       thS.addEventListener('click', (e) => {
         let col = e.target;
         let sort = null;
@@ -332,10 +327,10 @@ function theadSortAndFilter(tHead, length = false) {
           col.classList.add('asc');
           sort = false;
         }
-        sortStudents(async () => getStudents(), txt.getAttribute('for'), sort).then(result => renderStudentsTable(result));
+        sortStudents(async () => getStudents(), txt[0], sort).then(result => renderStudentsTable(result));
       });
       inputF.addEventListener('keyup', (e) => {
-        filterStudents(async () => getStudents(), txt.getAttribute('for'), e.srcElement.value).then(result => renderStudentsTable(result));
+        filterStudents(async () => getStudents(), txt[0], e.srcElement.value).then(result => renderStudentsTable(result));
       });
       thF.append(inputF);
       th.append(thS);
@@ -346,7 +341,7 @@ function theadSortAndFilter(tHead, length = false) {
     lastTh.textContent = 'Действия';
     tHead.append(lastTh);
   } else {
-    return lb.length;
+    return headerTH.length;
   }
 }
 
